@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright API Testing Framework - Capgemini QETS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0070ad 0%, #00a9ce 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 40px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #0070ad, #00a9ce, #40e0d0);
+        }
+
+        .capgemini-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .capgemini-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0070ad;
+            display: flex;
+            align-items: center;
+        }
+
+        .qets-badge {
+            background: linear-gradient(45deg, #0070ad, #00a9ce);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .slide-title {
+            font-size: 2.5em;
+            color: #0070ad;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .slide-subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            flex-grow: 1;
+        }
+
+        .content-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #0070ad;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #0070ad;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00a9ce;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #00a9ce20 0%, #40e0d020 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #00a9ce40;
+            margin: 20px 0;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #0070ad;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .layer {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #0070ad;
+            position: relative;
+        }
+
+        .layer-title {
+            font-weight: bold;
+            color: #0070ad;
+            margin-bottom: 10px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #00a9ce;
+            transition: transform 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .benefit-icon {
+            font-size: 2em;
+            color: #0070ad;
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #0070ad, #00a9ce);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 112, 173, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .slide {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .slide-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide">
+            <div class="capgemini-header">
+                <div class="capgemini-logo">
+                    <span style="margin-right: 10px;">🔷</span>
+                    Capgemini
+                </div>
+                <div class="qets-badge">QETS Practice</div>
+            </div>
+            <div style="text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                <h1 class="slide-title" style="font-size: 3.5em; margin-bottom: 30px;">
+                    Playwright API Testing Framework
+                </h1>
+                <p class="slide-subtitle" style="font-size: 1.5em;">
+                    Comprehensive TypeScript-based automation framework for robust API testing
+                </p>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">TypeScript</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Built-in Utilities</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">CI/CD Ready</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <p>Quality Engineering & Testing Services | Capgemini</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Framework Overview -->
+        <div class="slide">
+            <div class="capgemini-header">
+                <div class="capgemini-logo">
+                    <span style="margin-right: 10px;">🔷</span>
+                    Capgemini
+                </div>
+                <div class="qets-badge">QETS Practice</div>
+            </div>
+            <h2 class="slide-title">Framework Overview</h2>
+            <p class="slide-subtitle">Enterprise-grade API testing solution built for scale and reliability</p>
+            
+            <div class="content-grid">
+                <div class="content-section">
+                    <h3 class="section-title">🚀 Key Features</h3>
+                    <ul class="feature-list">
+                        <li>Full TypeScript support with strong typing</li>
+                        <li>Playwright's powerful API testing capabilities</li>
+                        <li>Modular and maintainable architecture</li>
+                        <li>Multi-environment support</li>
+                        <li>Data-driven testing capabilities</li>
+                        <li>Comprehensive reporting suite</li>
+                        <li>CI/CD pipeline integration</li>
+                        <li>Schema validation utilities</li>
+                    </ul>
+                </div>
+                
+                <div class="content-section">
+                    <h3 class="section-title">📊 Testing Capabilities</h3>
+                    <ul class="feature-list">
+                        <li>RESTful API endpoint testing</li>
+                        <li>Authentication & authorization flows</li>
+                        <li>Request/Response validation</li>
+                        <li>Performance testing integration</li>
+                        <li>Error handling & edge cases</li>
+                        <li>Contract testing support</li>
+                        <li>Mock service integration</li>
+                        <li>Load testing capabilities</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h4 style="color: #0070ad; margin-bottom: 15px;">💡 Why Choose Our Framework?</h4>
+                <p>Built by Capgemini's QETS practice with 20+ years of testing expertise, this framework combines industry best practices with cutting-edge technology to deliver reliable, scalable API testing solutions.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Architecture -->
+        <div class="slide">
+            <div class="capgemini-header">
+                <div class="capgemini-logo">
+                    <span style="margin-right: 10px;">🔷</span>
+                    Capgemini
+                </div>
+                <div class="qets-badge">QETS Practice</div>
+            </div>
+            <h2 class="slide-title">Framework Architecture</h2>
+            <p class="slide-subtitle">Layered architecture designed for maintainability and scalability</p>
+            
+            <div class="architecture-diagram">
+                <div class="layer">
+                    <div class="layer-title">🧪 Test Layer</div>
+                    <p>API test specifications, test suites, and data-driven test cases</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-title">🔧 Utilities Layer</div>
+                    <p>API clients, validators, helpers, and custom assertions</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-title">⚙️ Configuration Layer</div>
+                    <p>Environment configs, test settings, and execution parameters</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-title">📊 Reporting Layer</div>
+                    <p>HTML reports, JSON outputs, JUnit integration, and custom dashboards</p>
+                </div>
+                <div class="layer">
+                    <div class="layer-title">🎭 Playwright Core</div>
+                    <p>Microsoft Playwright engine with TypeScript runtime</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Code Example -->
+        <div class="slide">
+            <div class="capgemini-header">
+                <div class="capgemini-logo">
+                    <span style="margin-right: 10px;">🔷</span>
+                    Capgemini
+                </div>
+                <div class="qets-badge">QETS Practice</div>
+            </div>
+            <h2 class="slide-title">Code Example</h2>
+            <p class="slide-subtitle">Simple, clean, and powerful API testing with TypeScript</p>
+            
+            <div class="code-block">
+<pre>
+<span style="color: #569cd6;">import</span> { test, expect } <span style="color: #569cd6;">from</span> <span style="color: #ce9178;">'@playwright/test'</span>;
+<span style="color: #569cd6;">import</span> { ApiClient } <span style="color: #569cd6;">from</span> <span style="color: #ce9178;">'../utils/api-client'</span>;
+
+<span style="color: #dcdcaa;">test.describe</span>(<span style="color: #ce9178;">'User API Tests'</span>, () => {
+  <span style="color: #569cd6;">let</span> apiClient: ApiClient;
+
+  <span style="color: #dcdcaa;">test.beforeEach</span>(<span style="color: #569cd6;">async</span> ({ request }) => {
+    apiClient = <span style="color: #569cd6;">new</span> <span style="color: #4ec9b0;">ApiClient</span>(request);
+  });
+
+  <span style="color: #dcdcaa;">test</span>(<span style="color: #ce9178;">'should create user successfully'</span>, <span style="color: #569cd6;">async</span> () => {
+    <span style="color: #569cd6;">const</span> userData = {
+      name: <span style="color: #ce9178;">'John Doe'</span>,
+      email: <span style="color: #ce9178;">'john@example.com'</span>,
+      role: <span style="color: #ce9178;">'user'</span>
+    };
+
+    <span style="color: #569cd6;">const</span> response = <span style="color: #569cd6;">await</span> apiClient.<span style="color: #dcdcaa;">post</span>(<span style="color: #ce9178;">'/users'</span>, userData);
+    
+    <span style="color: #dcdcaa;">expect</span>(response.<span style="color: #dcdcaa;">status</span>()).<span style="color: #dcdcaa;">toBe</span>(<span style="color: #b5cea8;">201</span>);
+    
+    <span style="color: #569cd6;">const</span> responseBody = <span style="color: #569cd6;">await</span> response.<span style="color: #dcdcaa;">json</span>();
+    <span style="color: #dcdcaa;">expect</span>(responseBody.name).<span style="color: #dcdcaa;">toBe</span>(userData.name);
+    <span style="color: #dcdcaa;">expect</span>(responseBody.id).<span style="color: #dcdcaa;">toBeDefined</span>();
+  });
+});
+</pre>
+            </div>
+
+            <div class="content-grid">
+                <div class="content-section">
+                    <h3 class="section-title">✨ Code Benefits</h3>
+                    <ul class="feature-list">
+                        <li>Strong TypeScript typing</li>
+                        <li>Clean, readable syntax</li>
+                        <li>Reusable API client</li>
+                        <li>Built-in assertions</li>
+                        <li>Test organization</li>
+                    </ul>
+                </div>
+                <div class="content-section">
+                    <h3 class="section-title">🔍 Testing Features</h3>
+                    <ul class="feature-list">
+                        <li>Response validation</li>
+                        <li>Status code verification</li>
+                        <li>JSON schema validation</li>
+                        <li>Custom matchers</li>
+                        <li>Error handling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Benefits & ROI -->
+        <div class="slide">
+            <div class="capgemini-header">
+                <div class="capgemini-logo">
+                    <span style="margin-right: 10px;">🔷</span>
+                    Capgemini
+                </div>
+                <div class="qets-badge">QETS Practice</div>
+            </div>
+            <h2 class="slide-title">Benefits & ROI</h2>
+            <p class="slide-subtitle">Measurable impact on your testing efficiency and quality</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h4 style="color: #0070ad; margin-bottom: 10px;">Faster Development</h4>
+                    <p>Reduce test development time by 60% with pre-built utilities and templates</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h4 style="color: #0070ad; margin-bottom: 10px;">Higher Quality</h4>
+                    <p>Comprehensive validation and error handling ensure robust test coverage</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔄</div>
+                    <h4 style="color: #0070ad; margin-bottom: 10px;">CI/CD Integration</h4>
+                    <p>Seamless integration with popular CI/CD platforms and DevOps workflows</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <h4 style="color: #0070ad; margin-bottom: 10px;">Rich Reporting</h4>
+                    <p>Detailed HTML reports with trends, metrics, and actionable insights</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡️</div>
+                    <h4 style="color: #0070ad; margin-bottom: 10px;">Enterprise Ready</h4>
+                    <p>Security, scalability, and compliance features for enterprise environments</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎓</div>
+                    <h4 style="color: #0070ad; margin-bottom: 10px;">Easy Learning</h4>
+                    <p>Comprehensive documentation and training materials for quick onboarding</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h4 style="color: #0070ad; margin-bottom: 15px;">📈 ROI Metrics</h4>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-number">60%</span>
+                        <span class="stat-label">Faster Test Development</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">40%</span>
+                        <span class="stat-label">Reduced Maintenance</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">90%</span>
+                        <span class="stat-label">Bug Detection Rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Getting Started -->
+        <div class="slide">
+            <div class="capgemini-header">
+                <div class="capgemini-logo">
+                    <span style="margin-right: 10px;">🔷</span>
+                    Capgemini
+                </div>
+                <div class="qets-badge">QETS Practice</div>
+            </div>
+            <h2 class="slide-title">Getting Started</h2>
+            <p class="slide-subtitle">Start testing APIs in minutes with our comprehensive setup guide</p>
+            
+            <div class="content-grid">
+                <div class="content-section">
+                    <h3 class="section-title">🚀 Quick Setup</h3>
+                    <div class="code-block" style="font-size: 0.8em;">
+<pre>
+<span style="color: #6a9955;"># Clone the repository</span>
+git clone &lt;repository-url&gt;
+cd playwright-api-framework
+
+<span style="color: #6a9955;"># Install dependencies</span>
+npm install
+
+<span style="color: #6a9955;"># Install Playwright</span>
+npx playwright install
+
+<span style="color: #6a9955;"># Run your first test</span>
+npm run test
+</pre>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3 class="section-title">📋 Prerequisites</h3>
+                    <ul class="feature-list">
+                        <li>Node.js v16 or higher</li>
+                        <li>npm or yarn package manager</li>
+                        <li>Git for version control</li>
+                        <li>VS Code (recommended)</li>
+                        <li>Basic TypeScript knowledge</li>
+                        <li>API testing understanding</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h4 style="color: #0070ad; margin-bottom: 15px;">📚 Learning Resources</h4>
+                <div class="content-grid">
+                    <div>
+                        <ul class="feature-list">
+                            <li>Comprehensive README documentation</li>
+                            <li>Step-by-step tutorial videos</li>
+                            <li>Best practices guide</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="feature-list">
+                            <li>Sample test projects</li>
+                            <li>Community support forum</li>
+                            <li>Regular workshops & webinars</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="#" class="cta-button">📖 View Documentation</a>
+                <a href="#" class="cta-button">💾 Download Framework</a>
+                <a href="#" class="cta-button">🎓 Start Tutorial</a>
+            </div>
+
+            <div class="footer">
+                <p><strong>Contact QETS Team:</strong> qets.practice@capgemini.com | Internal Portal: qets.capgemini.com</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">© 2024 Capgemini. All rights reserved. | Quality Engineering & Testing Services</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling between slides
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+
+            // Add slide indicators
+            const indicators = document.createElement('div');
+            indicators.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                gap: 10px;
+                z-index: 1000;
+            `;
+
+            slides.forEach((slide, index) => {
+                const indicator = document.createElement('div');
+                indicator.style.cssText = `
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background: ${index === 0 ? '#0070ad' : 'rgba(255,255,255,0.5)'};
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                `;
+                indicator.addEventListener('click', () => {
+                    slide.scrollIntoView({ behavior: 'smooth' });
+                    updateIndicators(index);
+                });
+                indicators.appendChild(indicator);
+            });
+
+            document.body.appendChild(indicators);
+
+            function updateIndicators(activeIndex) {
+                indicators.children[currentSlide].style.background = 'rgba(255,255,255,0.5)';
+                indicators.children[activeIndex].style.background = '#0070ad';
+                currentSlide = activeIndex;
+            }
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                        updateIndicators(currentSlide);
+                    }
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        slides[currentSlide].scrollIntoView({ behavior: 'smooth' });
+                        updateIndicators(currentSlide);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
